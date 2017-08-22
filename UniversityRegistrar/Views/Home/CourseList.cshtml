@@ -7,9 +7,12 @@
   <input name="course-name" type="text">
   <label for="course-number">Enter a new course number</label>
   <input name="course-number" type="text">
+  <button type="submit" class="btn btn-info">Submit</button>
 </form>
 
 @foreach(var course in Model)
 {
   <p><a href="course/@course.GetId()">@course.GetName()</a></p>
 }
+
+<a href="/" class="btn btn-info">Back Home</a>

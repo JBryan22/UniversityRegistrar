@@ -4,7 +4,9 @@
 
 <h1>@Model["courses"].GetName() Details:</h1>
 
-@if (Model["students"].Count == 0)
+
+
+@if (Model["in-course"].Count == 0)
 {
   <h2>No students have registered for this course yet!</h2>
 }
@@ -12,12 +14,26 @@ else
 {
   <h3>Students registered for this course:</h3>
   <ul>
-  @foreach(var student in Model["students"])
+  @foreach(var student in Model["in-course"])
   {
     <li>@student.GetName()</li>
   }
   </ul>
 }
+
+<h3>Add a student to this class:</h3>
+<form action='/course/@Model["courses"].GetId()' method="post">
+  <select name="add-student">
+    @foreach(var student in @Model["out-of-course"])
+    {
+      <option value="@student.GetId()">@student.GetName()</option>
+
+    }
+  </select>
+  <button type="submit" class="btn btn-success">Add!</button>
+</form>
+
+
 
 <a href="/" class="btn btn-info">Back Home</a>
 <a href="/course-list">Back to Courses</a>

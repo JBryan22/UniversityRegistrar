@@ -206,15 +206,32 @@ namespace UniversityRegistrar.Models
       }
     }
 
-    public List<Student> GetStudents()
+    public List<Student> GetStudents(bool inCourse = true)
     {
+
         MySqlConnection conn = DB.Connection();
         conn.Open();
         var cmd = conn.CreateCommand() as MySqlCommand;
-        cmd.CommandText = @"SELECT students.* FROM courses
-          JOIN students_courses ON (courses.id = students_courses.course_id)
-          JOIN students ON (students.id = students_courses.student_id)
-          WHERE courses.id = @CourseId;";
+        if (inCourse)
+        {
+          cmd.CommandText = @"SELECT students.* FROM courses
+            JOIN students_courses ON (courses.id = students_courses.course_id)
+            JOIN students ON (students.id = students_courses.student_id)
+            WHERE courses.id = @CourseId;";
+        }
+        else
+        {
+          cmd.CommandText = @"SELECT students.* FROM students LEFT OUTER JOIN
+          courses ON (students.id = courses.id)
+          WHERE
+          courses.id IS NULL
+            UNION
+            SELECT students.* FROM students LEFT OUTER JOIN
+            students_courses ON (students.id = students_courses.student_id)
+            WHERE
+            students_courses.student_id IS NULL;";
+        }
+
 
         MySqlParameter courseIdParameter = new MySqlParameter();
         courseIdParameter.ParameterName = "@CourseId";
@@ -232,6 +249,12 @@ namespace UniversityRegistrar.Models
           Student newStudent = new Student(studentName, enrollment, studentId);
           students.Add(newStudent);
         }
+
+        foreach (var student in students)
+        {
+          Console.WriteLine(student.GetName());
+        }
+
         conn.Close();
         if (conn != null)
         {
