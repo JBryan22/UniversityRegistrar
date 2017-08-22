@@ -1,0 +1,23 @@
+@{
+  Layout = "_Layout";
+}
+
+<h1>@Model["courses"].GetName() Details:</h1>
+
+@if (Model["students"].Count == 0)
+{
+  <h2>No students have registered for this course yet!</h2>
+}
+else
+{
+  <h3>Students registered for this course:</h3>
+  <ul>
+  @foreach(var student in Model["students"])
+  {
+    <li>@student.GetName()</li>
+  }
+  </ul>
+}
+
+<a href="/" class="btn btn-info">Back Home</a>
+<a href="/course-list">Back to Courses</a>

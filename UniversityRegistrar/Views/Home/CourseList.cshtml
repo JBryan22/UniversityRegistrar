@@ -1,0 +1,15 @@
+@{
+  Layout = "_Layout";
+}
+
+<form action="/course-list" method="post">
+  <label for="course-name">Enter a new course name</label>
+  <input name="course-name" type="text">
+  <label for="course-number">Enter a new course number</label>
+  <input name="course-number" type="text">
+</form>
+
+@foreach(var course in Model)
+{
+  <p><a href="course/@course.GetId()">@course.GetName()</a></p>
+}
